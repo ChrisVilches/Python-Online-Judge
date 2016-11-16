@@ -11,31 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161116084448) do
+ActiveRecord::Schema.define(version: 20161116112048) do
 
-  create_table "casos", force: :cascade do |t|
-    t.string   "entrada"
-    t.string   "salida"
-    t.integer  "problem_id"
-    t.boolean  "publico"
+  create_table "problems", force: :cascade do |t|
+    t.string   "statement"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "title"
   end
 
-  create_table "envios", force: :cascade do |t|
+  create_table "submissions", force: :cascade do |t|
     t.integer  "problem_id"
     t.integer  "verdict"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  add_index "envios", ["problem_id"], name: "index_envios_on_problem_id"
+  add_index "submissions", ["problem_id"], name: "index_submissions_on_problem_id"
 
-  create_table "problems", force: :cascade do |t|
-    t.string   "enunciado"
+  create_table "testcases", force: :cascade do |t|
+    t.string   "input"
+    t.string   "output"
+    t.integer  "problem_id"
+    t.boolean  "public"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string   "title"
   end
 
 end

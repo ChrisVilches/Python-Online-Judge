@@ -1,7 +1,7 @@
 class Problem < ActiveRecord::Base
 
-	has_many :casos, :dependent => :destroy
-	has_many :envios
+	has_many :testcases, :dependent => :destroy
+	has_many :submissions
 
 	
 
