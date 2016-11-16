@@ -1,4 +1,4 @@
 json.array! @problems do |problem|
-	json.name problem.title
-	json.enunciado problem.enunciado	
+	json.title problem.title
+	json.statement problem.statement	
 end

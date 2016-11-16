@@ -1,3 +1,3 @@
-json.array! @casos do |caso|
-	json.extract! caso, :entrada, :salida
+json.array! @casos do |testcase|
+	json.extract! testcase, :input, :output
 end
