@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 		resources :submissions, only: [:create]
 	end
 	resources :testcases
+    resources :submissions
   
 
 
