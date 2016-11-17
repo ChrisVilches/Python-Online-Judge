@@ -11,4 +11,8 @@ export class ProblemService {
     getProblems(){
         return this._http.get(this._baseUrlService.getBaseUrl() + "/problems").map(res => res.json());
     }
+    
+    getProblem(id : number){
+        return this._http.get(this._baseUrlService.getBaseUrl() + "/problems/" + id).map(res => res.json());
+    }
 }

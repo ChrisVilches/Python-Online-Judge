@@ -1,1 +1,1 @@
-json.array! [@problem]
+json.problem @problem

@@ -9,25 +9,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var problem_service_1 = require("./services/problem.service");
-var AppComponent = (function () {
-    function AppComponent(_problemService) {
-        this._problemService = _problemService;
-        this._printProblems();
-    }
-    AppComponent.prototype._printProblems = function () {
+var problem_service_1 = require("../services/problem.service");
+var ProblemListComponent = (function () {
+    function ProblemListComponent(_problemService) {
         var _this = this;
-        this._problemService.getProblems().subscribe(function (data) { console.log(data); _this.problems = data; }, function (error) { return console.log("SE PILLO UN ERROR: " + error); }, function () { return console.log("Esto se ejecuta siempre."); });
-    };
-    AppComponent = __decorate([
+        this._problemService = _problemService;
+        this._problemService.getProblems().subscribe(function (data) { _this.problems = data; });
+    }
+    ProblemListComponent = __decorate([
         core_1.Component({
             selector: 'main-app',
-            template: "<p *ngFor=\"let problem of problems\">{{ problem.title }}</p>",
+            template: "<p *ngFor=\"let problem of problems\"><a [routerLink]=\"['/problems', problem.id]\">{{ problem.title }}</a></p>",
             providers: [problem_service_1.ProblemService]
         }), 
         __metadata('design:paramtypes', [problem_service_1.ProblemService])
-    ], AppComponent);
-    return AppComponent;
+    ], ProblemListComponent);
+    return ProblemListComponent;
 }());
-exports.AppComponent = AppComponent;
-//# sourceMappingURL=app.component.js.map
+exports.ProblemListComponent = ProblemListComponent;
+//# sourceMappingURL=problemlist.component.js.map

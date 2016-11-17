@@ -20,6 +20,9 @@ var ProblemService = (function () {
     ProblemService.prototype.getProblems = function () {
         return this._http.get(this._baseUrlService.getBaseUrl() + "/problems").map(function (res) { return res.json(); });
     };
+    ProblemService.prototype.getProblem = function (id) {
+        return this._http.get(this._baseUrlService.getBaseUrl() + "/problems/" + id).map(function (res) { return res.json(); });
+    };
     ProblemService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http, url_service_1.BaseUrlService])
