@@ -2,7 +2,11 @@ class SubmissionsController < ApplicationController
 	skip_before_filter :verify_authenticity_token
 
 	def index
-		@submissions = Submission.all
+		if params.has_key? :problem_id
+			@submissions = Submission.where(problem_id: params[:problem_id])
+		else
+			@submissions = Submission.all
+		end
 	end
 
 
