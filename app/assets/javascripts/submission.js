@@ -1,8 +1,10 @@
+var code_editor = null;
+
 $(document).on('turbolinks:load', function(){
 
-	if($("#source_code").length != 0){
+	if(code_editor == null && $("#source_code").length != 0){
 
-		var editor = CodeMirror.fromTextArea(document.getElementById("source_code"), {
+		code_editor = CodeMirror.fromTextArea(document.getElementById("source_code"), {
 			mode: {
 				name: "python",
 				version: 3,

@@ -1,4 +1,9 @@
 class SubmissionsController < ApplicationController
+	before_action :authenticate_user!
+
+	def index
+		@submissions = current_user.submissions
+	end
 
 	def show
 		@submission = Submission.find(params[:id])
@@ -10,7 +15,7 @@ class SubmissionsController < ApplicationController
 		problem_id = params[:problem_id]
 
 		# Crea un envio preliminar con veredicto Pending
-		@submission = Submission.new(problem_id: problem_id, verdict: :Pending)
+		@submission = Submission.new(problem_id: problem_id, verdict: :Pending, user: current_user)
 
 		if @submission.save
 			# Al envio se le modifica el veredicto aqui:

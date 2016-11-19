@@ -6,6 +6,12 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+users = User.create([
+	{:id => 1, :email =>"felovilches@gmail.com", :encrypted_password => "$2a$11$JIZAhTE1G5zCc.PEY4f3uuBdgKO50cQ2NuBbhngpqkZPqJ6W/LKVS", :created_at => "2016-11-19 09:52:16.411324", :updated_at => "2016-11-19 09:52:16.844787"},
+	{:id => 2, :email =>"patocespedes@gmail.com", :encrypted_password => "$2a$11$JIZAhTE1G5zCc.PEY4f3uuBdgKO50cQ2NuBbhngpqkZPqJ6W/LKVS", :created_at => "2016-11-19 09:52:16.411324", :updated_at => "2016-11-19 09:52:16.844787"},
+	{:id => 3, :email =>"lilicespedes@gmail.com", :encrypted_password => "$2a$11$JIZAhTE1G5zCc.PEY4f3uuBdgKO50cQ2NuBbhngpqkZPqJ6W/LKVS", :created_at => "2016-11-19 09:52:16.411324", :updated_at => "2016-11-19 09:52:16.844787"}
+	])
+
 
 problems = Problem.create([
 	{id: 1, title: "Sumando numeros", statement: "Dados dos numeros a y b, sumalos."},
