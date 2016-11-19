@@ -34,7 +34,12 @@
 		
 		<%= form_tag problem_submissions_path(@problem), method: :post do %>
 			<div class="form-group">
-			<%= text_area_tag :source_code, "numbers = map(int, raw_input().split())", required: true, class: "form-control", rows: 10 %>
+			<%= text_area_tag :source_code, 
+			"numbers = map(int, raw_input().split())", 
+			required: true, 
+			class: "form-control", 
+			id: :source_code,
+			name: :source_code %>
 			</div>
 
 		<fieldset class="form-group">
@@ -96,4 +101,4 @@
 
 	</div>
 
-</div>
+</div> 

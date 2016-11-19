@@ -1,3 +1,22 @@
+$(document).on('turbolinks:load', function(){
+
+	if($("#source_code").length != 0){
+
+		var editor = CodeMirror.fromTextArea(document.getElementById("source_code"), {
+			mode: {
+				name: "python",
+				version: 3,
+				singleLineStringErrors: false
+			},
+			lineNumbers: true,
+			indentUnit: 4,
+			matchBrackets: true,
+			theme: 'oceanic'
+		});
+	}
+});
+
+
 function reload_pending_submission(resource_url, submission_id){
 
 	var pending = $("td[pending="+submission_id+"]");	
@@ -24,5 +43,4 @@ function reload_pending_submission(resource_url, submission_id){
 		if(times == 5) 
 			clearInterval(interval);
 	}, 3000);
-
 }
