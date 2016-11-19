@@ -17,10 +17,12 @@
 </p>
 
 <% if @current_category %>
+<blockquote class="blockquote">
 <dl>
 	<dt><%= @current_category.name %></dt>
 	<dd><%= @current_category.description %></dd>
 </dl>
+</blockquote>
 <% end %>
 
 
@@ -29,4 +31,5 @@
 	<p>Resuelto por <%= p.users_solved %> usuarios (total, <%= p.total_submissions %> envios)</p>
 <% end %>
 
-<%= will_paginate @problems %>
+
+<%= will_paginate @problems, :renderer => 'BootstrapPaginationHelper::LinkRenderer' %>
