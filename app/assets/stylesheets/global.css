@@ -1,0 +1,7 @@
+.code-link:hover{
+	text-decoration: none;
+}
+
+code.current-category{
+	background-color: #ffc7c7;
+}

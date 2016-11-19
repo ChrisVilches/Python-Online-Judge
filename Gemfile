@@ -15,6 +15,8 @@ gem 'bootstrap-sass', '~> 3.2.0'
 # Autoprefixer (autoprefixer-rails) is optional, but recommended. It automatically adds the proper vendor prefixes to your CSS code when it is compiled.
 gem 'autoprefixer-rails'
 
+gem 'will_paginate', '~> 3.1.0'
+
 gem 'sucker_punch', '~> 2.0'
 
 # Use CoffeeScript for .coffee assets and views

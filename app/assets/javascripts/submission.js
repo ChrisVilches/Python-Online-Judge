@@ -42,7 +42,8 @@ function reload_pending_submission(resource_url, submission_id){
 			}
 		});
 		times++;
-		if(times == 5) 
+		if(times == 5){
 			clearInterval(interval);
+		}
 	}, 3000);
 }

@@ -2,7 +2,17 @@ class ProblemsController < ApplicationController
 	before_action :authenticate_user!
 
 	def index
-		@problems = Problem.all
+		@categories = Category.all
+
+		if params[:category]			
+			@problems = Problem.joins(:categories).where("categories.id = ?", params[:category]).paginate(:page => params[:page], :per_page => 2)
+			
+			cat_id = Integer params[:category]
+			@current_category = @categories.detect{|cat| cat.id == cat_id}
+
+		else
+			@problems = Problem.paginate(:page => params[:page], :per_page => 2)
+		end
 	end
 
 	def show

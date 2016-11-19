@@ -5,7 +5,7 @@ class ExecutePythonJob
   include SuckerPunch::Job
   workers 4
 
-  def perform(submission_id, source_code, problem_id)
+  def perform(submission_id, source_code, problem_id, user_id)
     
 		codigo_enviado = Tempfile.new('envio')
 		codigo_enviado.write(source_code)
@@ -40,7 +40,10 @@ class ExecutePythonJob
 
 
 		if casos_correctos == casos_totales
-			final_verdict = :Accepted	
+			final_verdict = :Accepted
+			if Submission.where({:problem_id => problem_id, :user_id => user_id, :verdict => Submission.verdicts[:Accepted]}).empty?
+				Problem.find(problem_id).increment!(:users_solved) 
+			end
 		end
 
 		

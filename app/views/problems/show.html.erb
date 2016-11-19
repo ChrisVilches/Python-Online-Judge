@@ -5,6 +5,12 @@
 	
 	<div class="col-md-9">
 		<p><%= @problem.statement %></p>
+
+		<p>
+		<% @problem.categories.each do |cat| %>		
+			<code><%= cat.name %></code> 
+		<% end %>
+		</p>
 	</div>
 
 	<% unless @testcases.empty? %>
@@ -30,7 +36,6 @@
 
 <div class="row">
 	<div class="col-md-6">
-
 		
 		<%= form_tag problem_submissions_path(@problem), method: :post do %>
 			<div class="form-group">
