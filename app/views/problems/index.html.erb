@@ -1,0 +1,5 @@
+<% @problems.each do |p| %>
+	
+	<p><%= link_to p.title, {:controller => :problems, :action => :show, :id => p.id}, { :class => "link_class"} %></p>
+
+<% end %>

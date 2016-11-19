@@ -1,0 +1,99 @@
+<div class="row">
+	<div class="col-md-12">
+		<legend><h2><%= @problem.title %></h2></legend>
+	</div>
+	
+	<div class="col-md-9">
+		<p><%= @problem.statement %></p>
+	</div>
+
+	<% unless @testcases.empty? %>
+		<div class="col-md-3">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Entrada</th><th>Salida</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @testcases.each do |test| %>
+						<tr>
+							<td><%= test.input %></td>
+							<td><%= test.output %></td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+	<% end %>
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+
+		
+		<%= form_tag problem_submissions_path(@problem), method: :post do %>
+			<div class="form-group">
+			<%= text_area_tag :source_code, "numbers = map(int, raw_input().split())", required: true, class: "form-control", rows: 10 %>
+			</div>
+
+		<fieldset class="form-group">
+			<legend>Seleccionar lenguaje</legend>
+			<div class="form-check">
+				<label class="form-check-label">
+					<input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+					Python 2.7
+				</label>
+			</div>
+			<div class="form-check">
+				<label class="form-check-label">
+					<input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2">
+					Python 3.0+
+				</label>
+			</div>
+		</fieldset>
+
+
+			<%= submit_tag "Enviar", class: "btn btn-primary" %>
+		<% end %>
+		
+	</div>
+
+	<div class="col-md-6">
+
+	<% unless @my_submissions.empty? %>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>id</th><th>Fecha</th><th>Veredicto</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @my_submissions.each do |submission| %>				
+						<tr>				
+						<td><%= submission.id  %></td>	
+						<td><%= time_ago_in_words submission.created_at %></td>
+
+						<% if params[:submission_id] && submission.id == Integer(params[:submission_id]) && submission.verdict == "Pending" -%>
+							<td pending="<%= submission.id %>">
+						<% else -%>
+							<td>
+						<% end -%>
+
+						<%= submission.verdict %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	<% end %>
+
+	<% if params[:submission_id] %>
+		<script>
+			reload_pending_submission("<%= submissions_url %>", <%= params[:submission_id] %>);
+		</script>
+	<% end %>
+
+	</div>
+
+</div>
