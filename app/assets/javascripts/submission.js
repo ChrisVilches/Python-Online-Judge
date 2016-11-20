@@ -16,6 +16,15 @@ $(document).on('turbolinks:load', function(){
 			theme: 'oceanic'
 		});
 	}
+
+
+	/* Guardar y restaurar la version del lenguaje */
+	$("#submit_code_form").on("submit", function(){
+		localStorage.setItem("py_version", $("input[name=python_version]:checked").val());
+	});
+
+	$("input[name=python_version][value=" + localStorage.getItem("py_version") + "]").attr('checked', 'checked');
+
 });
 
 

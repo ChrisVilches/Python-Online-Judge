@@ -63,7 +63,7 @@
                             <%= f.password_field :password, class: "form-control", placeholder: "Password" %>                                   
                         </div>
                         <%= f.submit "Login", class: "btn btn-primary" %>
-                        <%= link_to "Crear cuenta", {:controller => "devise/registrations", :action => "new"} %>
+                        <%= link_to "Crear cuenta", {:controller => "devise/registrations", :action => "new"}, class: "btn btn-primary" %>
                    </form>
                  <% end %>
 
@@ -116,13 +116,13 @@
         <!-- /.row -->
 
 
-
+  <footer class="container-fluid text-center">
+    <p>Magic Python, 2016</p>
+  </footer>
     </div>
     <!-- /.container -->
 
-<footer class="container-fluid text-center">
-  <p>Magic Python, 2016</p>
-</footer>
+
 
 
 </body>

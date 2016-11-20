@@ -19,3 +19,56 @@ footer {
 code.current-category{
 	background-color: #ffc7c7;
 }
+
+tr.just_sent{
+	background-color: #FFFFCC;
+}
+
+.non-draggable{
+	user-drag: none; 
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-drag: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.btn-primary,
+.btn-primary:active,
+.btn-primary:hover,
+.btn-primary:visited,
+.btn-primary:focus {
+    background-color: #3090C7;
+    border-color: #15317E;
+}
+
+.btn-primary:hover {
+    background-color: #357EC7;
+}
+
+
+.navbar-inverse .navbar-nav > li > a {
+	color: #cccccc;
+}
+
+.navbar-inverse .navbar-brand {
+	color: #cccccc;
+}
+
+.btn-pagination {
+	margin-bottom: 5px;
+	background-color:#181818;
+	color: #bdbdbd;
+}
+
+.btn-pagination:hover {
+	background-color:#404040;
+	color: #cccccc;
+}
+
+.btn-pagination-active,
+.btn-pagination-active:hover{
+	font-weight: bold;	
+	background: -webkit-linear-gradient(top, #a90329 0%,#8f0222 44%,#6d0019 100%);
+	background: linear-gradient(to bottom, #a90329 0%,#8f0222 44%,#6d0019 100%);
+}

@@ -1,7 +1,7 @@
 <p>
 	<% if @current_category %>
 		<%= link_to problems_path, :class => "code-link" do %>
-			<code><i class="glyphicon glyphicon-remove"></i></code>
+			<button class="btn btn-default"><i class="glyphicon glyphicon-remove"></i></button>
 		<% end %>		
 	<% end %>
 
@@ -26,10 +26,33 @@
 <% end %>
 
 
-<% @problems.each do |p| %>
-	<p><%= link_to p.title, {:controller => :problems, :action => :show, :id => p.id}, { :class => "link_class"} %></p>
-	<p>Resuelto por <%= p.users_solved %> usuarios (total, <%= p.total_submissions %> envios)</p>
+
+<% if @problems.any? %>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Titulo</th>
+				<th>Resuelto por</th>
+				<th>Total envios</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @problems.each do |p| %>
+			<tr>
+				<th scope="row"><%= p.id %></th>
+				<td><%= link_to p.title, {:controller => :problems, :action => :show, :id => p.id}, { :class => "link_class"} %></td>
+				<td><%= p.users_solved %></td>
+				<td><%= p.total_submissions %></td>
+			</tr>
+			<% end %>			
+		</tbody>
+	</table>
+<% else %>
+	<pre>No hay problemas en esta categoria</pre>
+
 <% end %>
 
 
 <%= will_paginate @problems, :renderer => 'BootstrapPaginationHelper::LinkRenderer' %>
+

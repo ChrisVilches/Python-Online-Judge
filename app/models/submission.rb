@@ -7,4 +7,7 @@ class Submission < ActiveRecord::Base
 	validates_presence_of :problem
 	validates_presence_of :user
 
+	validates :py_version,
+    		:inclusion  => { :in => [ 2, 3 ] }
+
 end

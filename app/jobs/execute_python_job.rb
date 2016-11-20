@@ -5,53 +5,64 @@ class ExecutePythonJob
   include SuckerPunch::Job
   workers 4
 
-  def perform(submission_id, source_code, problem_id, user_id)
-    
-		codigo_enviado = Tempfile.new('envio')
-		codigo_enviado.write(source_code)
-		codigo_enviado.close
-		final_verdict = :Pending
 
-		casos_prueba = Problem.find(problem_id).testcases
 
-		casos_totales = casos_prueba.length
-		casos_correctos = 0
-		
-		casos_prueba.each do |caso|			
+  def perform(submission_id, source_code, problem_id, user_id, py_version)
+    		
 
-			# Crear un script bash para ejecutar con tiempo limite y memoria limite
-			# Y prohibir afectar el sistema con uso de librerias (como ejecutar
-			# comandos bash y borrar todo el disco duro, por ejemplo)
-			stdout, stderr, status = Open3.capture3("python", codigo_enviado.path, stdin_data: caso[:input])
+	    		codigo_enviado = Tempfile.new('envio')
+			codigo_enviado.write(source_code)
+			codigo_enviado.close
+			final_verdict = :Pending	
+			casos_prueba = nil
 
-			if stderr.length != 0
-				final_verdict = "Runtime error"
-				break
+			ActiveRecord::Base.connection_pool.with_connection do
+				casos_prueba = Testcase.where(problem_id: problem_id)
 			end
 
-			if !resultados_iguales?(stdout, caso[:output])
-				final_verdict = "Wrong answer"
-				break
-			end
+			assert !casos_prueba.nil?
+			
+			assert casos_prueba.length != 0
 
-			casos_correctos += 1
-
-		end	
-
-
-		if casos_correctos == casos_totales
-			final_verdict = :Accepted
-			if Submission.where({:problem_id => problem_id, :user_id => user_id, :verdict => Submission.verdicts[:Accepted]}).empty?
-				Problem.find(problem_id).increment!(:users_solved) 
-			end
-		end
+			casos_totales = casos_prueba.length
+			casos_correctos = 0
 
 		
-		codigo_enviado.unlink
+			casos_prueba.each do |caso|			
 
-		ActiveRecord::Base.connection_pool.with_connection do
+				# Crear un script bash para ejecutar con tiempo limite y memoria limite
+				# Y prohibir afectar el sistema con uso de librerias (como ejecutar
+				# comandos bash y borrar todo el disco duro, por ejemplo)
+				stdout, stderr, status = Open3.capture3("python#{py_version}", codigo_enviado.path, stdin_data: caso[:input])
+
+				if stderr.length != 0
+					final_verdict = "Runtime error"
+					break
+				end
+
+				if !resultados_iguales?(stdout, caso[:output])
+					final_verdict = "Wrong answer"
+					break
+				end
+
+				casos_correctos += 1
+
+			end	
+
+			ActiveRecord::Base.connection_pool.with_connection do
+			if casos_correctos == casos_totales
+				final_verdict = :Accepted
+				if Submission.where({:problem_id => problem_id, :user_id => user_id, :verdict => Submission.verdicts[:Accepted]}).empty?
+					Problem.find(problem_id).increment!(:users_solved) 
+				end
+			end					
+		
 	      		Submission.update(submission_id, :verdict => final_verdict)
-   		 end	
+
+	   		 end	
+
+	   		 codigo_enviado.unlink
+   		 
   end
 
 

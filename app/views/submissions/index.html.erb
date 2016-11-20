@@ -1,0 +1,43 @@
+<%= page_header "Envios" %>
+
+<% unless @submissions.empty? %>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>id</th><th>Fecha</th><th>Veredicto</th><th>Lenguaje</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @submissions.each do |submission| %>	
+
+					<% just_sent = params[:submission_id] && submission.id == Integer(params[:submission_id]) %>
+					<% pending = submission.verdict == "Pending" %>
+
+					<tr<%= add_attr "class", "just_sent" if just_sent %>>				
+					<td><%= submission.id  %></td>	
+					<td><%= time_ago_in_words submission.created_at %></td>
+
+					<td<%= add_attr "pending", submission.id if just_sent && pending %>>
+						<%= submission.verdict %>
+					</td>
+					<td>
+					<%=
+						case submission.py_version 
+							when 2
+								"Python 2.7"
+							when 3
+								"Python 3.0"
+						end 
+					%>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% else %>
+	<pre>No has realizado ningun envio... AUN.</pre>
+
+<% end %>
+
+<%= will_paginate @submissions, :renderer => 'BootstrapPaginationHelper::LinkRenderer' %>
