@@ -3,7 +3,7 @@ var problem_id = null;
 
 $(document).on('turbolinks:load', function(){
 
-	if(code_editor == null && $("#source_code").length != 0){
+	if($("#source_code").length != 0){
 
 		code_editor = CodeMirror.fromTextArea(document.getElementById("source_code"), {
 			mode: {
@@ -21,7 +21,7 @@ $(document).on('turbolinks:load', function(){
 	load_code();
 
 
-	/* Guardar y restaurar la version del lenguaje */
+	// Form submit handler
 	$("#submit_code").on("click", function(e){
 
 		e.preventDefault();
@@ -37,12 +37,11 @@ $(document).on('turbolinks:load', function(){
 		// Saves form
 		save_code();
 
-
 		$("#submit_code_form").submit();
 		
 	});
-
 });
+
 
 function save_code(){
 	localStorage.setItem("submission_" + problem_id, JSON.stringify({

@@ -3,20 +3,18 @@
 </div>
 
 <div class="row">
-
 	<%= render partial: "new_submission" %>
-
 	<div class="col-md-6">
-	<%= render partial: "my_submissions" %>
+	<%= render partial: "my_submissions", locals: { my_submissions: @my_submissions } %>
 	</div>
 </div> 
 
-
-<script>
+<%= javascript_tag do %>
 	init(<%= params[:id] %>);
 
 	<% if params[:submission_id] %>
 	reload_pending_submission("<%= submissions_url %>", <%= params[:submission_id] %>);
 	<% end %>
-</script>
+<% end %>
+
 

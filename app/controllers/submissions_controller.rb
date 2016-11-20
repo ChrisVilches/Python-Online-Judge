@@ -3,7 +3,20 @@ class SubmissionsController < ApplicationController
 	protect_from_forgery
 
 	def index
-		@submissions = Submission.where(user: current_user).order("id desc").paginate(:page => params[:page], :per_page => 15)
+
+		if params[:problem_id]
+			@latest_submissions = Submission.limit(10).where(problem: @problem, user: current_user).order("id DESC")
+			
+				respond_to do |format|
+  format.js { render "action", :locals => {:id => params[:id]} }
+end
+
+			#render js:  { :template => "latest_submissions",:layout => false }
+
+
+		else
+			@submissions = Submission.where(user: current_user).order("id desc").paginate(:page => params[:page], :per_page => 15)
+		end
 	end
 
 	def show

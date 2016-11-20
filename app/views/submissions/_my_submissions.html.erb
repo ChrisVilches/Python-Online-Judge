@@ -6,7 +6,7 @@
 <% end %>
 
 
-<% unless @my_submissions.empty? %>
+<% unless my_submissions.empty? %>
 
 	<table class="table">
 		<thead>
@@ -15,7 +15,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<% @my_submissions.each do |submission| %>	
+			<% my_submissions.each do |submission| %>	
 
 					<% just_sent = params[:submission_id] && submission.id == Integer(params[:submission_id]) %>
 					<% pending = submission.verdict == "Pending" %>
