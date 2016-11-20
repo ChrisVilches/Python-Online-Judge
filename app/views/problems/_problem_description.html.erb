@@ -1,0 +1,33 @@
+<div class="col-md-12">
+	<legend><h2><%= @problem.title %></h2></legend>
+</div>
+
+<div class="col-md-9">
+	<p><%= @problem.statement %></p>
+
+	<p>
+	<% @problem.categories.each do |cat| %>		
+		<code><%= cat.name %></code> 
+	<% end %>
+	</p>
+</div>
+
+<% unless @testcases.empty? %>
+	<div class="col-md-3">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Entrada</th><th>Salida</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @testcases.each do |test| %>
+					<tr>
+						<td><%= test.input %></td>
+						<td><%= test.output %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+<% end %>

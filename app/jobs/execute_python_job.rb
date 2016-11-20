@@ -3,7 +3,7 @@ require 'open3'
 
 class ExecutePythonJob
   include SuckerPunch::Job
-  workers 4
+  workers 2
 
 
 

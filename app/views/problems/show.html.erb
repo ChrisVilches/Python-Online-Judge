@@ -1,125 +1,22 @@
 <div class="row">
-	<div class="col-md-12">
-		<legend><h2><%= @problem.title %></h2></legend>
-	</div>
-	
-	<div class="col-md-9">
-		<p><%= @problem.statement %></p>
-
-		<p>
-		<% @problem.categories.each do |cat| %>		
-			<code><%= cat.name %></code> 
-		<% end %>
-		</p>
-	</div>
-
-	<% unless @testcases.empty? %>
-		<div class="col-md-3">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Entrada</th><th>Salida</th>
-					</tr>
-				</thead>
-				<tbody>
-					<% @testcases.each do |test| %>
-						<tr>
-							<td><%= test.input %></td>
-							<td><%= test.output %></td>
-						</tr>
-					<% end %>
-				</tbody>
-			</table>
-		</div>
-	<% end %>
+<%= render partial: "problem_description" %>
 </div>
 
 <div class="row">
-	<div class="col-md-6">
-		
-		<%= form_tag problem_submissions_path(@problem), method: :post, id: :submit_code_form do %>
-			<div class="form-group">
-			<%= text_area_tag :source_code, 
-			"nums = map(int, raw_input().split())", 
-			required: true, 
-			class: "form-control", 
-			id: :source_code %>
-			</div>
 
-		<fieldset class="form-group">
-			<legend>Seleccionar lenguaje</legend>
-			<div class="form-check">
-				<label class="form-check-label">
-					<%= radio_button_tag :python_version, 2, true %>
-					Python 2.7
-				</label>
-			</div>
-			<div class="form-check">
-				<label class="form-check-label">
-					<%= radio_button_tag :python_version, 3, false %>
-					Python 3.0+
-				</label>
-			</div>
-		</fieldset>
-
-
-			<%= submit_tag "Enviar", class: "btn btn-primary" %>
-		<% end %>
-		
-	</div>
+	<%= render partial: "new_submission" %>
 
 	<div class="col-md-6">
-
-	<% if @accepted %>
-	  <div class="alert alert-success ">
-	    <span class="glyphicon glyphicon-ok pull-left"></span> 
-	    	<p class="text-center">Ya resolviste este problema</p>
-	    </div>
-	<% end %>
-
-
-
-	<% unless @my_submissions.empty? %>
-
-		<table class="table">
-			<thead>
-				<tr>
-					<th>id</th><th>Fecha</th><th>Veredicto</th><th>Lenguaje</th>
-				</tr>
-			</thead>
-			<tbody>
-				<% @my_submissions.each do |submission| %>	
-
-						<% just_sent = params[:submission_id] && submission.id == Integer(params[:submission_id]) %>
-						<% pending = submission.verdict == "Pending" %>
-
-						<tr<%= add_attr "class", "just_sent" if just_sent %>>				
-						<td><%= submission.id  %></td>	
-						<td><%= time_ago_in_words submission.created_at %></td>
-
-						<td<%= add_attr "pending", submission.id if just_sent && pending %>>
-							<%= submission.verdict %>
-						</td>
-						<td>
-						<%=
-							case submission.py_version 
-								when 2
-									"Python 2.7"
-								when 3
-									"Python 3.0"
-							end 
-						%>
-						</td>
-					</tr>
-				<% end %>
-			</tbody>
-		</table>
-	<% end %>
+	<%= render partial: "my_submissions" %>
 	</div>
 </div> 
 
-<% if params[:submission_id] %>
-	<script>
-		reload_pending_submission("<%= submissions_url %>", <%= params[:submission_id] %>);
-	</script>
-<% end %>
+
+<script>
+	init(<%= params[:id] %>);
+
+	<% if params[:submission_id] %>
+	reload_pending_submission("<%= submissions_url %>", <%= params[:submission_id] %>);
+	<% end %>
+</script>
+

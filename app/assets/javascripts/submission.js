@@ -1,4 +1,5 @@
 var code_editor = null;
+var problem_id = null;
 
 $(document).on('turbolinks:load', function(){
 
@@ -17,15 +18,53 @@ $(document).on('turbolinks:load', function(){
 		});
 	}
 
+	load_code();
+
 
 	/* Guardar y restaurar la version del lenguaje */
-	$("#submit_code_form").on("submit", function(){
-		localStorage.setItem("py_version", $("input[name=python_version]:checked").val());
+	$("#submit_code").on("click", function(e){
+
+		e.preventDefault();
+
+		// Validations
+		if($("#submit_code").attr("disabled")) return;
+		if(code_editor.getValue().trim().length == 0) return;
+				
+		// Avoid sending data multiple times
+		$( "#submit_code" ).attr("disabled", true);
+		$( "#submit_code" ).val("Espere...");
+
+		// Saves form
+		save_code();
+
+
+		$("#submit_code_form").submit();
+		
 	});
 
-	$("input[name=python_version][value=" + localStorage.getItem("py_version") + "]").attr('checked', 'checked');
-
 });
+
+function save_code(){
+	localStorage.setItem("submission_" + problem_id, JSON.stringify({
+		problem_id: problem_id,
+		python_version: $("input[name=python_version]:checked").val(),
+		source_code: code_editor.getValue()
+	}));
+}
+
+function load_code(){
+	old_code = localStorage.getItem("submission_" + problem_id);
+	if(old_code != null){
+		old_code = JSON.parse(old_code);
+		$("input[name=python_version][value=" + old_code.python_version + "]").attr('checked', 'checked');
+		code_editor.setValue(old_code.source_code);
+	}
+}
+
+
+function init(id){
+	problem_id = id;
+}
 
 
 function reload_pending_submission(resource_url, submission_id){
