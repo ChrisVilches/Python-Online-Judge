@@ -20,9 +20,6 @@ class ExecutePythonJob
 				casos_prueba = Testcase.where(problem_id: problem_id)
 			end
 
-			assert !casos_prueba.nil?
-			
-			assert casos_prueba.length != 0
 
 			casos_totales = casos_prueba.length
 			casos_correctos = 0
