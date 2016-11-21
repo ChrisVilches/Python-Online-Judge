@@ -14,5 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require handlebars
+//= require rails-timeago
+//= require locales/jquery.timeago.es.js
 //= require bootstrap-sprockets
 //= require_tree .

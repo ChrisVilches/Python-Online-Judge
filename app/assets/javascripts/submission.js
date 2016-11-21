@@ -1,31 +1,73 @@
 var code_editor = null;
-var problem_id = null;
+var rails_data = {};
 var template = null;
+var polling_attempts = 5;
 
-$(document).on('turbolinks:load', function(){
+function initialize_code_editor(){
 
-	template = Handlebars.compile($("#submissions_table").html());
+	if(!$("#source_code").length) return;
 
-	if($("#source_code").length != 0){
+	code_editor = CodeMirror.fromTextArea(document.getElementById("source_code"), {
+		mode: {
+			name: "python",
+			version: 3,
+			singleLineStringErrors: false
+		},
+		lineNumbers: true,
+		indentUnit: 4,
+		matchBrackets: true,
+		theme: 'oceanic'
+	});
+}
 
-		code_editor = CodeMirror.fromTextArea(document.getElementById("source_code"), {
-			mode: {
-				name: "python",
-				version: 3,
-				singleLineStringErrors: false
-			},
-			lineNumbers: true,
-			indentUnit: 4,
-			matchBrackets: true,
-			theme: 'oceanic'
-		});
+function get_and_render_submissions(){
+
+	if(!template)
+		 template = Handlebars.compile($("#submissions_table").html());
+
+	$.ajax({
+		url: "/problems/" + rails_data.problem_id + "/submissions", 
+		dataType: "json"
+	})
+	.done(function(res){
+		if(just_sent = res.find(sub => sub.id == rails_data.submission_id))
+			just_sent.highlight = true;
+
+		var render = template({ submissions: res });
+		$("#latest_submissions").html(render);
+
+		$("time.timeago").timeago();
+
+		if(res.find(sub => sub.verdict == "Pending")){ // Polling
+			polling_attempts--;
+			if(polling_attempts > 0)
+				setTimeout(get_and_render_submissions, 3000);
+			else
+				console.log("Demasiados polling")
+		}
+	});
+}
+
+
+function save_code(){
+	localStorage.setItem("submission_" + rails_data.problem_id, JSON.stringify({
+		problem_id: rails_data.problem_id,
+		python_version: $("input[name=python_version]:checked").val(),
+		source_code: code_editor.getValue()
+	}));
+}
+
+function load_code(){
+	old_code = localStorage.getItem("submission_" + rails_data.problem_id);
+	if(old_code != null){
+		old_code = JSON.parse(old_code);
+		$("input[name=python_version][value=" + old_code.python_version + "]").attr('checked', 'checked');
+		code_editor.setValue(old_code.source_code);
 	}
+}
 
-	load_code();
 
-
-	// Form submit handler
-	$("#submit_code").on("click", function(e){
+function submit_code_handler(e){
 
 		e.preventDefault();
 
@@ -40,87 +82,19 @@ $(document).on('turbolinks:load', function(){
 		// Saves form
 		save_code();
 
-		$("#submit_code_form").submit();
-		
-	});
-});
-
-function get_and_render_submissions(){
-
-	$.ajax({
-		url: "/problems/1/submissions", 
-		dataType: "json"
-	})
-	.done(function(res){
-		var render = template({ submissions: res });
-		$("#latest_submissions").html(render);
-		
-	});
-
+		$("#submit_code_form").submit();		
 
 }
 
-function save_code(){
-	localStorage.setItem("submission_" + problem_id, JSON.stringify({
-		problem_id: problem_id,
-		python_version: $("input[name=python_version]:checked").val(),
-		source_code: code_editor.getValue()
-	}));
+
+function initialize_submission_form(data){	
+	rails_data = data;	
+	initialize_code_editor();
+	$("#submit_code").on("click", submit_code_handler);
+
+	if(rails_data.user_signed){
+		get_and_render_submissions();
+		load_code();
+	}	
 }
 
-function load_code(){
-	old_code = localStorage.getItem("submission_" + problem_id);
-	if(old_code != null){
-		old_code = JSON.parse(old_code);
-		$("input[name=python_version][value=" + old_code.python_version + "]").attr('checked', 'checked');
-		code_editor.setValue(old_code.source_code);
-	}
-}
-
-
-function init(id){
-	get_and_render_submissions();
-	problem_id = id;
-}
-
-
-function reload_pending_submission(resource_url, submission_id){
-
-	var pending = $("td[pending="+submission_id+"]");	
-	if(pending.length == 0) return;
-	
-	var times = 0;
-	var id = pending.attr("pending");
-
-	var interval = setInterval(function(){
-		$.ajax({
-			type: "GET",
-			url: resource_url + "/" + id,
-			success: function(res){
-				if(res.verdict != 0){
-					clearInterval(interval);
-					pending.html(res.verdict_name);
-				}
-			},
-			error: function(){
-				clearInterval(interval);
-			}
-		});
-		times++;
-		if(times == 5){
-			clearInterval(interval);
-		}
-	}, 3000);
-}
-
-
-
-Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
-	if (arguments.length < 3)
-		throw new Error("Handlebars Helper equal needs 2 parameters");
-	if( lvalue!=rvalue ) {
-		return options.inverse(this);
-	} else {
-		return options.fn(this);
-	}
-});

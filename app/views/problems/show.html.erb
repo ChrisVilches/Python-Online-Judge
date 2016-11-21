@@ -18,14 +18,6 @@
 	</div>
 </div> 
 
-<%= javascript_tag do %>
-	init(<%= params[:id] %>);
-
-	<% if params[:submission_id] %>
-	reload_pending_submission("<%= submissions_url %>", <%= params[:submission_id] %>);
-	<% end %>
-<% end %>
-
 <script id="submissions_table" type="text/x-handlebars-template">​
 	<table class="table">
 		<thead>
@@ -35,9 +27,9 @@
 		</thead>
 		<tbody>
 			{{#each submissions}}
-				<tr>				
+				<tr {{#if highlight}}class="just_sent"{{/if}}>				
 					<td>{{ id }}</td>	
-					<td>{{ created_at }}</td>
+					<td><time class="timeago" datetime="{{ created_at }}"></time></td>
 					<td>{{ verdict }}</td>
 					<td>
 					{{# equal py_version 2 }}
@@ -51,3 +43,15 @@
 		</tbody>
 	</table>	
 ​</script>
+
+
+
+
+<%= javascript_tag do %>
+	initialize_submission_form({ 
+		problem_id: 		<%= params[:id] %>,
+		submission_id: 	<%= params[:submission_id] || -1 %>,
+		user_signed: 		<%= user_signed_in? %>
+	});
+<% end %>
+
