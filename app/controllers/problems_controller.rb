@@ -17,11 +17,8 @@ class ProblemsController < ApplicationController
 	def show
 		@problem = Problem.find(params[:id])
 		@testcases = Testcase.where(problem: @problem, public: true)
-		@my_submissions = Submission.limit(10).where(problem: @problem, user: current_user).order("id DESC")
-
 		accepted = Submission.limit(1).where(problem: @problem, user: current_user, :verdict => Submission.verdicts[:Accepted])
 		@accepted = !accepted.empty? # TRUE si accepted no es vacio
-
 	end
 
 	

@@ -5,7 +5,16 @@
 <div class="row">
 	<%= render partial: "new_submission" %>
 	<div class="col-md-6">
-	<%= render partial: "my_submissions", locals: { my_submissions: @my_submissions } %>
+
+		<% if @accepted %>
+		<div class="alert alert-success ">
+			<span class="glyphicon glyphicon-ok pull-left"></span> 
+			<p class="text-center">Ya resolviste este problema</p>
+		</div>
+		<% end %>
+
+		<div id="latest_submissions"></div>
+
 	</div>
 </div> 
 
@@ -17,4 +26,28 @@
 	<% end %>
 <% end %>
 
-
+<script id="submissions_table" type="text/x-handlebars-template">​
+	<table class="table">
+		<thead>
+			<tr>
+				<th>id</th><th>Fecha</th><th>Veredicto</th><th>Lenguaje</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each submissions}}
+				<tr>				
+					<td>{{ id }}</td>	
+					<td>{{ created_at }}</td>
+					<td>{{ verdict }}</td>
+					<td>
+					{{# equal py_version 2 }}
+						Python 2.7
+					{{else}}
+						Python 3.0
+					{{/equal}}
+					</td>
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>	
+​</script>

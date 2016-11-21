@@ -5,24 +5,18 @@ class SubmissionsController < ApplicationController
 	def index
 
 		if params[:problem_id]
-			@latest_submissions = Submission.limit(10).where(problem: @problem, user: current_user).order("id DESC")
+
+			@latest_submissions = Submission.limit(10).where(problem_id: params[:problem_id], user: current_user).order("id DESC")
 			
-				respond_to do |format|
-  format.js { render "action", :locals => {:id => params[:id]} }
-end
-
-			#render js:  { :template => "latest_submissions",:layout => false }
-
+			respond_to do |format|						
+				format.html { redirect_to problem_path(params[:problem_id]) }
+				format.json { render json: @latest_submissions }
+			end
 
 		else
 			@submissions = Submission.where(user: current_user).order("id desc").paginate(:page => params[:page], :per_page => 15)
 		end
 	end
-
-	def show
-		@submission = Submission.find(params[:id])
-	end
-
 
 	def create
 

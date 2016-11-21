@@ -4,10 +4,10 @@ Rails.application.routes.draw do
   	root 'home#index'
 
 	resources :problems do
-		resources :submissions, only: [:index, :show, :create]
+		resources :submissions, only: [:index, :create]
 	end
 
-	resources :submissions, :defaults => { :format => :js }
+	resources :submissions, only: [:index]
 
 
 	# The priority is based upon order of creation: first created -> highest priority.

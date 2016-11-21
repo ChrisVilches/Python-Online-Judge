@@ -1,7 +1,10 @@
 var code_editor = null;
 var problem_id = null;
+var template = null;
 
 $(document).on('turbolinks:load', function(){
+
+	template = Handlebars.compile($("#submissions_table").html());
 
 	if($("#source_code").length != 0){
 
@@ -42,6 +45,20 @@ $(document).on('turbolinks:load', function(){
 	});
 });
 
+function get_and_render_submissions(){
+
+	$.ajax({
+		url: "/problems/1/submissions", 
+		dataType: "json"
+	})
+	.done(function(res){
+		var render = template({ submissions: res });
+		$("#latest_submissions").html(render);
+		
+	});
+
+
+}
 
 function save_code(){
 	localStorage.setItem("submission_" + problem_id, JSON.stringify({
@@ -62,6 +79,7 @@ function load_code(){
 
 
 function init(id){
+	get_and_render_submissions();
 	problem_id = id;
 }
 
@@ -94,3 +112,15 @@ function reload_pending_submission(resource_url, submission_id){
 		}
 	}, 3000);
 }
+
+
+
+Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
+	if (arguments.length < 3)
+		throw new Error("Handlebars Helper equal needs 2 parameters");
+	if( lvalue!=rvalue ) {
+		return options.inverse(this);
+	} else {
+		return options.fn(this);
+	}
+});

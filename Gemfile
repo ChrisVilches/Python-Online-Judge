@@ -15,6 +15,7 @@ gem 'bootstrap-sass', '~> 3.2.0'
 # Autoprefixer (autoprefixer-rails) is optional, but recommended. It automatically adds the proper vendor prefixes to your CSS code when it is compiled.
 gem 'autoprefixer-rails'
 
+
 gem 'will_paginate', '~> 3.1.0'
 
 gem 'sucker_punch', '~> 2.0'
@@ -32,6 +33,8 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
+
+gem 'handlebars_assets'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
